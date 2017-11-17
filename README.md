@@ -1,5 +1,8 @@
 # fire
 
+# wechat
+vue + ssr + wechat + koa
+
 > Nuxt.js project
 
 ## Build Setup
