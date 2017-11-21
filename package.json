@@ -13,12 +13,17 @@
   },
   "dependencies": {
     "cross-env": "^5.0.1",
+    "ejs": "^2.5.7",
+    "formstream": "^1.1.0",
     "koa": "^2.3.0",
     "koa-router": "^7.3.0",
     "mongoose": "^4.13.4",
     "nuxt": "^1.0.0-rc3",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "sha1": "^1.1.1",
-    "source-map-support": "^0.4.15"
+    "source-map-support": "^0.4.15",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
