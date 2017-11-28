@@ -27,6 +27,7 @@
     "sha1": "^1.1.1",
     "source-map-support": "^0.4.15",
     "style-loader": "^0.19.0",
+    "vue-awesome-swiper": "^2.6.7",
     "vue-style-loader": "^3.0.3",
     "xml2js": "^0.4.19"
   },

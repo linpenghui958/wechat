@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const baseUrl = ''
-const apiUrl = 'http://rap.taobao.org/mockjsdata/24957'
+const apiUrl = 'http://rap.taobao.org/mockjsdata/21639'
 
 class Services {
   getWechatSignature (url) {
@@ -13,14 +13,29 @@ class Services {
     return axios.get(`${baseUrl}/wechat-oauth?url=${url}`)
   }
 
-  fetchHouses (url) {
+  async fetchHouses () {
     return axios.get(`${apiUrl}/wiki/houses`)
   }
-  fetchCities (url) {
+  async fetchHouse (id) {
+    return axios.get(`${apiUrl}/wiki/houses/${id}`)
+  }
+  async fetchCities () {
     return axios.get(`${apiUrl}/wiki/cities`)
   }
-  fetchCharacters (url) {
+  async fetchCharacters () {
     return axios.get(`${apiUrl}/wiki/characters`)
+  }
+  async fetchCharacter (id) {
+    return axios.get(`${apiUrl}/wiki/characters/${id}`)
+  }
+  async fetchProducts () {
+    return axios.get(`${apiUrl}/wiki/products`)
+  }
+  async fetchProduct (id) {
+    return axios.get(`${apiUrl}/wiki/products/${id}`)
+  }
+  async fetchUserAndOrders (id) {
+    return axios.get(`${apiUrl}/api/user`)
   }
 }
 
