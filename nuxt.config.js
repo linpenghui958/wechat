@@ -2,6 +2,12 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  build: {
+    extend (config, {isDev, isClient}) {
+      const vueLoader = config.module.rules.find((rule) => rule.loader === 'vue-loader')
+      vueLoader.options.loaders.sass = 'vue-style-loader!css-loader!sass-loader'
+    }
+  },
   head: {
     title: 'starter',
     meta: [
@@ -11,12 +17,22 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {
+        src: 'http://res.wx.qq.com/open/js/jweixin-1.2.0.js'
+      }
     ]
   },
   /*
   ** Global CSS
   */
-  css: ['~static/css/main.css'],
+  css: [
+    {
+      src: 'static/sass/base.sass',
+      lang: 'sass?indentedSyntax=true'
+    }
+  ],
   /*
   ** Customize the progress-bar color
   */

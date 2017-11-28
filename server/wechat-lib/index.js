@@ -3,6 +3,7 @@ import formstream from 'formstream'
 import fs from 'fs'
 import path from 'path'
 import * as _ from 'lodash'
+import { sign } from './util'
 const base = 'https://api.weixin.qq.com/cgi-bin/'
 
 const api = {
@@ -69,6 +70,8 @@ export default class Wechat {
     this.appSecret = opts.appSecret
     this.getAccessToken = opts.getAccessToken
     this.saveAccessToken = opts.saveAccessToken
+    this.getTicket = opts.getTicket
+    this.saveTicket = opts.saveTicket
 
     this.fetchAccessToken()
   }
@@ -87,7 +90,7 @@ export default class Wechat {
   async fetchAccessToken () {
     let data = await this.getAccessToken()
 
-    if (!this.isValidAccessToken(data)) {
+    if (!this.isValidToken(data, 'access_token')) {
       data = await this.updateAccessToken()
     }
     await this.saveAccessToken(data)
@@ -103,8 +106,30 @@ export default class Wechat {
     return data
   }
 
-  isValidAccessToken (data) {
-    if (!data || !data.access_token || !data.expires_in) {
+  async fetchTicket (token) {
+    let data = await this.getTicket() // 获取ticket
+
+    if (!this.isValidToken(data, 'ticket')) {
+      data = await this.updateTicket(token) // 更新ticket
+    }
+    await this.saveTicket(data) // 保存ticket
+    return data
+  }
+
+  async updateTicket (token) {
+    const url = api.ticket.get + '&access_token=' + token + '&type=jsapi'
+
+    let data = await this.request({url: url})
+    const now = (new Date().getTime())
+    const expiresIn = now + (data.expires_in - 20) * 1000
+    // 过期时间
+    data.expires_in = expiresIn
+
+    return data
+  }
+
+  isValidToken (data, name) {
+    if (!data || !data[name] || !data.expires_in) {
       return false
     }
     const expires_in = data.expires_in
@@ -224,5 +249,161 @@ export default class Wechat {
     const url = api.permanent.batch + 'access_token=' + token
 
     return {method: 'POST', url: url, body: options}
+  }
+
+  createTag (token, name) {
+    const form = {
+      tag: {
+        name: name
+      }
+    }
+    const url = api.tag.create + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  fetchTags (token) {
+    const url = api.tag.fetch + 'access_token=' + token
+
+    return {url: url}
+  }
+
+  updateTag (token, tagId, name) {
+    const form = {
+      tag: {
+        id: tagId,
+        name: name
+      }
+    }
+
+    const url = api.tag.update + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  delTag (token, tagId) {
+    const form = {
+      tag: {
+        id: tagId
+      }
+    }
+
+    const url = api.tag.del + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  fetchTagUsers (token, tagId, openId) {
+    const form = {
+      tagid: tagId,
+      next_openid: openId || ''
+    }
+    const url = api.tag.fetchUsers + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  // unTag true|false
+  batchTag (token, openIdList, tagId, unTag) {
+    const form = {
+      openid_list: openIdList,
+      tagid: tagId
+    }
+    let url = api.tag.batchTag
+
+    if (unTag) {
+      url = api.tag.batchUnTag
+    }
+
+    url += 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  getTagList (token, openId) {
+    const form = {
+      openid: openId
+    }
+    const url = api.tag.getTagList + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  remarkUser (token, openId, remark) {
+    const form = {
+      openid: openId,
+      remark: remark
+    }
+    const url = api.user.remark + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  getUserInfo (token, openId, lang) {
+    const url = `${api.user.info}access_token=${token}&openid=${openId}&lang=${lang || 'zh_CN'}`
+
+    return {url: url}
+  }
+
+  batchUserInfo (token, userList) {
+    const url = api.user.batchInfo + 'access_token=' + token
+    const form = {
+      user_list: userList
+    }
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  fetchUserList (token, openId) {
+    const url = `${api.user.fetchUserList}access_token=${token}&next_openid=${openId || ''}`
+
+    return {url: url}
+  }
+
+  createMenu (token, menu) {
+    const url = api.menu.create + 'access_token=' + token
+
+    return {method: 'POST', url: url, body: menu}
+  }
+
+  getMenu (token) {
+    const url = api.menu.get + 'access_token=' + token
+
+    return {url: url}
+  }
+
+  delMenu (token) {
+    const url = api.menu.del + 'access_token=' + token
+
+    return {url: url}
+  }
+
+  addConditionMenu (token, menu, rule) {
+    const url = api.menu.addCondition + 'access_token=' + token
+    const form = {
+      button: menu,
+      matchrule: rule
+    }
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  delConditionMenu (token, menuId) {
+    const url = api.menu.delCondition + 'access_token=' + token
+    const form = {
+      menuid: menuId
+    }
+
+    return {method: 'POST', url: url, body: form}
+  }
+
+  getCurrentMenuInfo (token) {
+    const url = api.menu.getInfo + 'access_token=' + token
+
+    return {url: url}
+  }
+
+  sign (ticket, url) {
+    return sign(ticket, url)
   }
 }

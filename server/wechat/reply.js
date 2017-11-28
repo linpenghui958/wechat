@@ -11,7 +11,8 @@ const bt = '这里是山竹和阿瓜分享的前端资源 <a href="http://pan.ba
 
 export default async (ctx, next) => {
   const message = ctx.weixin
-
+  let mp = require('../wechat')
+  let client = mp.getWechat()
   if (message.MsgType === 'event') {
     if (message.Event === 'subscribe') {
       ctx.body = tip
@@ -23,6 +24,15 @@ export default async (ctx, next) => {
       ctx.body = tip
     }
   } else if (message.MsgType === 'text') {
+    if (message.Content === '1') {
+      // const data = await client.handle('createTag', 'VueSSR')
+      // const data = await client.handle('batchTag', userList, 2)
+      const data = await client.handle('getTagList', 'oABtC1FHS8w63QRixHYohNc6fQTo')
+      console.log(data)
+    } else if (message.Content === '2') {
+      const menuData = await client.handle('getMenu')
+      console.log(JSON.stringify(menuData))
+    }
     ctx.body = message.Content
   } else if (message.MsgType === 'image') {
     ctx.body = {

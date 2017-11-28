@@ -1,5 +1,6 @@
 import xml2js from 'xml2js'
 import template from './tpl'
+import sha1 from 'sha1'
 
 function parseXML (xml) {
   return new Promise((resolve, reject) => {
@@ -71,59 +72,60 @@ function tpl (content, message) {
   return template(info)
 }
 
-// function createNonce () {
-//   return Math.random().toString(36).substr(2, 15)
-// }
+function createNonce () {
+  return Math.random().toString(36).substr(2, 15)
+}
 
-// function createTimestamp () {
-//   return parseInt(new Date().getTime() / 1000, 0) + ''
-// }
+function createTimestamp () {
+  return parseInt(new Date().getTime() / 1000, 0) + ''
+}
 
-// function raw (args) {
-//   let keys = Object.keys(args)
-//   let newArgs = {}
-//   let str = ''
+function raw (args) {
+  let keys = Object.keys(args)
+  let newArgs = {}
+  let str = ''
 
-//   keys = keys.sort()
-//   keys.forEach((key) => {
-//     newArgs[key.toLowerCase()] = args[key]
-//   })
+  keys = keys.sort()
+  keys.forEach((key) => {
+    newArgs[key.toLowerCase()] = args[key]
+  })
 
-//   for (let k in newArgs) {
-//     str += '&' + k + '=' + newArgs[k]
-//   }
+  for (let k in newArgs) {
+    str += '&' + k + '=' + newArgs[k]
+  }
 
-//   return str.substr(1)
-// }
+  return str.substr(1)
+}
 
-// function signIt (nonce, ticket, timestamp, url) {
-//   const ret = {
-//     jsapi_ticket: ticket,
-//     nonceStr: nonce,
-//     timestamp: timestamp,
-//     url: url
-//   }
+function signIt (nonce, ticket, timestamp, url) {
+  const ret = {
+    jsapi_ticket: ticket,
+    nonceStr: nonce,
+    timestamp: timestamp,
+    url: url
+  }
 
-//   const string = raw(ret)
-//   const sha = sha1(string)
+  const string = raw(ret)
+  const sha = sha1(string)
 
-//   return sha
-// }
+  return sha
+}
 
-// function sign (ticket, url) {
-//   const nonce = createNonce()
-//   const timestamp = createTimestamp()
-//   const signature = signIt(nonce, ticket, timestamp, url)
+function sign (ticket, url) {
+  const nonce = createNonce() // 生成随机字符串
+  const timestamp = createTimestamp() // 生成时间戳
+  const signature = signIt(nonce, ticket, timestamp, url) // 签名算法
 
-//   return {
-//     noncestr: nonce,
-//     timestamp: timestamp,
-//     signature: signature
-//   }
-// }
+  return {
+    noncestr: nonce,
+    timestamp: timestamp,
+    signature: signature
+  }
+}
 
 export {
   formatMessage,
   parseXML,
-  tpl
+  tpl,
+  sign
 }
