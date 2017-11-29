@@ -27,15 +27,15 @@ export const getIMDbCharacter = async () => {
 
     let name = character.text()
     let chId = character.attr('href')
-
-    const data = {
-      playedBy,
-      nmId,
-      name,
-      chId
+    if (nmId && playedBy && name && chId) {
+      const data = {
+        playedBy,
+        nmId,
+        name,
+        chId
+      }
+      photos.push(data)
     }
-
-    photos.push(data)
   })
   console.log('共拿到' + photos.length + '数据')
   writeFileSync('./imdb1.json', JSON.stringify(photos, null, 2), 'utf8')
@@ -56,12 +56,33 @@ export const getIMDbCharacter = async () => {
   // )
   var filterArray = function (array) {
     let newArray = []
-    array = JSON.stringify(array)
-    array.foreach((item) => {
-      if (item.playedBy && item.name && item.nmId && item.chId) {
-        newArray.push(item)
+    // array = JSON.parse(array)
+    for (let i = 0; i < array.lenght; i++) {
+      if (array[i].playedBy && array[i].name && array[i].nmId && array[i].chId) {
+        const reg1 = /\/name\/(.*?)\/\?ref/
+        const reg2 = /\/character\/(.*?)\/\?ref/
+
+        const match1 = array[i].nmId.match(reg1)
+        const match2 = array[i].chId.match(reg2)
+
+        array[i].nmId = match1[1]
+        array[i].chId = match2[1]
+        newArray.push(array[i])
       }
-    })
+    }
+    // array.foreach((item) => {
+    //   if (item.playedBy && item.name && item.nmId && item.chId) {
+    //     const reg1 = /\/name\/(.*?)\/\?ref/
+    //     const reg2 = /\/character\/(.*?)\/\?ref/
+
+    //     const match1 = item.nmId.match(reg1)
+    //     const match2 = item.chId.match(reg2)
+
+    //     item.nmId = match1[1]
+    //     item.chId = match2[1]
+    //     newArray.push(item)
+    //   }
+    // })
     return newArray
   }
 
