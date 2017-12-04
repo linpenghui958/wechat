@@ -2,12 +2,21 @@ import fs from 'fs'
 import { resolve } from 'path'
 import mongoose from 'mongoose'
 import config from '../config'
+import R from 'ramda'
 const models = resolve(__dirname, '../database/schema')
 
 fs.readdirSync(models)
   .filter(file => ~file.search(/^[^\.].*js$/))
   .forEach(file => require(resolve(models, file)))
 
+const wikiHouseData = require(resolve(__dirname, '../../wikiHousesWithSwornMembers.json'))
+let wikiCharacterData = require(resolve(__dirname, '../../qiniuCharacters.json'))
+
+// 保证_id与nmId一致
+wikiCharacterData = R.map(i => {
+  i._id = i.nmId
+  return i
+})(wikiCharacterData)
 export const database = app => {
   mongoose.set('debug', true)
 
@@ -21,7 +30,23 @@ export const database = app => {
     console.error(err)
   })
 
-  mongoose.connection.on('open', async => {
+  mongoose.connection.on('open', async () => {
     console.log('Connected to MongoDB', config.db)
+
+    const wikiHouseModel = mongoose.model('WikiHouse')
+    const wikiCharacterModel = mongoose.model('WikiCharacter')
+    
+    const isExistWikiHouse = await wikiHouseModel.find({}).exec()
+    const isExistWikiCharacterModel = await wikiCharacterModel.find({}).exec()
+    if (!isExistWikiHouse.length) {
+      wikiHouseModel.insertMany(wikiHouseData)
+    } else {
+      console.log('wikiHouseModel 已存在数据')
+    }
+    if (!isExistWikiCharacterModel.length) {
+      wikiCharacterModel.insertMany(wikiCharacterData)
+    } else {
+      console.log('wikiCharacterModel 已存在数据')
+    }
   })
 }
