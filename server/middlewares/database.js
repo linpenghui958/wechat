@@ -33,11 +33,13 @@ export const database = app => {
   mongoose.connection.on('open', async () => {
     console.log('Connected to MongoDB', config.db)
 
+    // 引入对应的model
     const wikiHouseModel = mongoose.model('WikiHouse')
     const wikiCharacterModel = mongoose.model('WikiCharacter')
-    
+    // 查询数据库中是否存在tables
     const isExistWikiHouse = await wikiHouseModel.find({}).exec()
     const isExistWikiCharacterModel = await wikiCharacterModel.find({}).exec()
+    // 如果不存在，插入数据
     if (!isExistWikiHouse.length) {
       wikiHouseModel.insertMany(wikiHouseData)
     } else {
