@@ -1,19 +1,11 @@
-import Router from 'koa-router'
-import config from '../config/index'
-import reply from '../wechat/reply'
+import Route from '../decorator/router'
 import { resolve } from 'path'
-import wechatMiddle from '../wechat-lib/middleware'
-import { signature, redirect, oauth } from '../controllers/wechat'
+
+const r = path => resolve(__dirname, path)
 
 export const router = app => {
-  const router = new Router()
+  const apiPath = r('../routes')
+  const router = new Route(app, apiPath)
 
-  router.all('/wechat-hear', wechatMiddle(config.wechat, reply))
-  router.get('/wechat-signature', signature)
-  router.get('/wechat-redirect', redirect)
-  router.get('/wechat-oauth', oauth)
-
-  app
-    .use(router.routes())
-    .use(router.allowedMethods())
+  router.init()
 }

@@ -1,9 +1,9 @@
 <template lang="pug">
 .container
   .focusCharacters-header
-    img.focusCharacters-header-bg(v-if='character.images', :src="character.images[character.images.length - 1]")
+    img.focusCharacters-header-bg(v-if='character.images', :src="imageCDN + character.images[character.images.length - 1]")
     .focusCharacters-media
-      img(v-if='character.profile', :src="character.profile")
+      img(v-if='character.profile', :src="imageCDN + character.profile")
       .focusCharacters-text
         .names
           p.cname {{ character.cname }}
@@ -11,14 +11,14 @@
         //- .allegiances
         //-   p 史塔克家族
         //-   p 无面者
-        span.born {{ character.nmId }}
+        //- span.born {{ character.nmId }}
   
   .focusCharacters-body
     .focusCharacters-intro
-      p(v-for='item in character.intro') {{ item }}
+      p {{ character.intro }}
     
     .focusCharacter-stills
-      img(v-for='item in character.images', :src="item")
+      img(v-for='item in character.images', :src="imageCDN + item + '?imageView2/1/w/750/h/460/format/jpg/q/75|imageslim'")
   
     .focusCharacter-item(v-for='item in character.sections')
       .focusCharacter-item-title {{ item.title }}
@@ -36,7 +36,8 @@ export default {
   },
   computed: {
     ...mapState({
-      'character': 'currentCharacter'
+      character: 'currentCharacter',
+      imageCDN: 'imageCDN'
     })
   },
   beforeCreate () {

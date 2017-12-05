@@ -1,6 +1,7 @@
 <template lang="pug">
 .container
   .focusHouse-media
+    img(v-if='house.cname', :src='imageCDN + house.cname + ".jpg?imageView2/0/format/jpg/q/75|imageslim"')
     .focusHouse-text
       .words {{ house.words }}
       .name {{ house.name }}
@@ -12,9 +13,10 @@
     .focusHouse-item-title 主要角色
     .focusHouse-item-body(v-for='(item, index) in house.swornMembers', :key='index')
       .swornMembers
-        img(:src='item.profile')
+        img(:src='imageCDN + item.character.profile + "?imageView2/0/format/jpg/q/75|imageslim"'
+        , @click='showCharacter(item)')
         .swornMembers-body
-          .name {{ item.cname }}
+          .name {{ item.character.cname }}
           .introduction {{ item.text }}
 
     .focusHouse-item-section(v-for='(item, index) in house.sections', :key='index')
@@ -32,8 +34,19 @@ export default {
   },
   computed: {
     ...mapState({
-      'house': 'currentHouse'
+      'house': 'currentHouse',
+      'imageCDN': 'imageCDN'
     })
+  },
+  methods: {
+    showCharacter(item) {
+      this.$router.push({
+        path: '/character',
+        query: {
+          id: item.character._id
+        }
+      })
+    }
   },
   beforeCreate () {
     let id = this.$route.query.id

@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 const baseUrl = ''
-const apiUrl = 'http://rap.taobao.org/mockjsdata/21639'
 
 class Services {
   getWechatSignature (url) {
@@ -14,28 +13,31 @@ class Services {
   }
 
   async fetchHouses () {
-    return axios.get(`${apiUrl}/wiki/houses`)
+    try {
+      return axios.get(`${baseUrl}/wiki/houses`)
+    } catch (e) {
+      console.log(e)
+    }
+    // return {data: {data: []}, success: true}
   }
   async fetchHouse (id) {
-    return axios.get(`${apiUrl}/wiki/houses/${id}`)
-  }
-  async fetchCities () {
-    return axios.get(`${apiUrl}/wiki/cities`)
+    return axios.get(`${baseUrl}/wiki/houses/${id}`)
   }
   async fetchCharacters () {
-    return axios.get(`${apiUrl}/wiki/characters`)
+    return axios.get(`${baseUrl}/wiki/characters`)
+    // return {data: {data: []}, success: true}
   }
   async fetchCharacter (id) {
-    return axios.get(`${apiUrl}/wiki/characters/${id}`)
+    return axios.get(`${baseUrl}/wiki/characters/${id}`)
   }
   async fetchProducts () {
-    return axios.get(`${apiUrl}/wiki/products`)
+    return axios.get(`${baseUrl}/wiki/products`)
   }
   async fetchProduct (id) {
-    return axios.get(`${apiUrl}/wiki/products/${id}`)
+    return axios.get(`${baseUrl}/wiki/products/${id}`)
   }
   async fetchUserAndOrders (id) {
-    return axios.get(`${apiUrl}/api/user`)
+    return axios.get(`${baseUrl}/api/user`)
   }
 }
 

@@ -17,11 +17,6 @@ export default {
     state.characters = res.data.data
     return res
   },
-  async fetchCities ({ state }) {
-    const res = await Services.fetchCities()
-    state.cities = res.data.data
-    return res
-  },
   async showHouse ({ state }, _id) {
     if (_id === state.currentHouse._id) return
     const res = await Services.fetchHouse(_id)
