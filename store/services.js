@@ -31,10 +31,10 @@ class Services {
     return axios.get(`${baseUrl}/wiki/characters/${id}`)
   }
   async fetchProducts () {
-    return axios.get(`${baseUrl}/wiki/products`)
+    return axios.get(`${baseUrl}/api/products`)
   }
   async fetchProduct (id) {
-    return axios.get(`${baseUrl}/wiki/products/${id}`)
+    return axios.get(`${baseUrl}/api/products/${id}`)
   }
   async fetchUserAndOrders (id) {
     return axios.get(`${baseUrl}/api/user`)

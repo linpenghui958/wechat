@@ -1,4 +1,5 @@
 import Services from './services'
+import axios from 'axios'
 
 export default {
   getWechatSignature ({commit}, url) {
@@ -39,6 +40,24 @@ export default {
     const res = await Services.fetchProduct(_id)
     state.currentProduct = res.data.data
     return res
+  },
+  async saveProduct ({ state, dispatch }, product) {
+    await axios.post('/api/products', product)
+    const res = await dispatch('fetchProducts')
+
+    return res.data.data
+  },
+  async putProduct ({ state, dispatch }, product) {
+    await axios.put('/api/products', product)
+    const res = await dispatch('fetchProducts')
+
+    return res.data.data
+  },
+  async delProduct ({ state, dispatch }, product) {
+    await axios.delete(`/api/products/${product._id}`)
+    const res = await dispatch('fetchProducts')
+
+    return res.data.data
   },
   async fetchUserAndOrders ({ state }) {
     const res = await Services.fetchUserAndOrders()

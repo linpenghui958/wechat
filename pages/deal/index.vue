@@ -4,15 +4,15 @@
     .focus-goods-swiper(v-swiper:mySwiper='swiperConfig')
       .swiper-wrapper
         .swiper-slide(v-for='(item, index) in product.images', :key='index')
-          img(:src="item")
+          img(:src="imageCDN + item")
           
       .swiper-pagination.swiper-pagination-bullets
     
     .focus-goods-content
       
       .focus-goods-price(v-if='product.price')
-        span.focus-goods-price_main {{ product.price.toFixed(2) - product.price.toFixed(2).substr(-3) }}
-        span.focus-goods-price_others {{ product.price.toFixed(2).substr(-3) }}
+        span.focus-goods-price_main {{ product.price }}
+        span.focus-goods-price_others {{ product.price }}
       
       .focus-goods-name {{ product.title }}
 
@@ -66,7 +66,8 @@ export default {
   },
   computed: {
     ...mapState({
-      product: 'currentProduct'
+      product: 'currentProduct',
+      imageCDN: 'imageCDN'
     })
   },
   methods: {

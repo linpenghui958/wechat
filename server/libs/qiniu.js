@@ -6,7 +6,16 @@ qiniu.conf.ACCESS_KEY = config.qiniu_accessKey
 qiniu.conf.SECRET_KEY = config.qiniu_secretKey
 
 const bucket = 'fire'
+var mac = new qiniu.auth.digest.Mac(config.qiniu_accessKey, config.qiniu_secretKey)
 // 上传空间命
+export const uptoken = (key) => {
+  let options = {
+    scope: bucket + ':' + key
+  }
+  let putPolicy = new qiniu.rs.PutPolicy(options)
+  let uploadToken = putPolicy.uploadToken(mac)
+  return uploadToken
+}
 export const fetchImage = async (url, key) => {
   // const client = new qiniu.rs.Client()
 

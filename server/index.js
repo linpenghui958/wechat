@@ -9,7 +9,7 @@ const r = path => resolve(__dirname, path)
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
 config.dev = !(process.env === 'production')
-const MIDDLEWARES = ['database', 'router']
+const MIDDLEWARES = ['database', 'common', 'router']
 
 class Server {
   constructor () {
