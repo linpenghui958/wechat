@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "bcrypt": "^1.0.3",
     "cheerio": "^1.0.0-rc.2",
     "cheerio-advanced-selectors": "^1.1.1",
     "cross-env": "^5.0.1",
@@ -22,6 +23,7 @@
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.3.0",
+    "koa-session": "^5.5.1",
     "mongoose": "^4.13.4",
     "nuxt": "^1.0.0-rc3",
     "postcss-loader": "^2.0.9",

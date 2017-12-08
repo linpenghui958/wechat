@@ -163,6 +163,9 @@ export default {
     deleteImg (index) {
       this.edited.images.splice(index, 1)
     },
+    /**通过传入的随机key获取上传token
+    * @param {String} key 随机key
+    */
     async getUptoken (key) {
       let res = await axios.get('/qiniu/token', {
         params: {
@@ -171,28 +174,36 @@ export default {
       })
       return res.data.data.token
     },
+    /**上传图片方法
+     * @param {Evnet} e 事件对象
+     */
     async uploadImg (e) {
       // this.upload.dashoffset = this.upload.dasharray
+      // 获取文件对象，生成一个随机key
       let file = e.target.files[0]
       let key = randomToken(32)
 
       key = `products/${key}`
-
+      // 获取上传所需随机key
       let token = await this.getUptoken(key)
-      let uptoken = {
+      // 构建上传所需的options
+      let options = {
         uptoken: token,
         key: Buffer.from(key).toString('base64')
       }
-      let uploader = new Uploader(file, uptoken, BLOCK_SIZE, CHUNK_SIZE, QINIU_UPLOAD_URL)
+      // 构建上传对象
+      let uploader = new Uploader(file, options, BLOCK_SIZE, CHUNK_SIZE, QINIU_UPLOAD_URL)
+      // 监听上传进度函数
       uploader.on('progress', () => {
         console.log(uploader.percent)
         // let dashoffset = this.upload.dasharray * (1 - uploader.percent)
         // this.upload.dashoffset = dashoffset
       })
-
+      // 开始上传
       let res = await uploader.upload()
       uploader.cancel()
       console.log(res)
+      // 将返回的数据塞入数组
       this.edited.images.push(res.key)
     }
   },

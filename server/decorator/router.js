@@ -3,6 +3,7 @@ import Router from 'koa-router'
 import { resolve } from 'path'
 import glob from 'glob'
 import _ from 'lodash'
+import R from 'ramda'
 
 export let routersMap = new Map()
 
@@ -67,4 +68,30 @@ export const put = path => router({
 export const del = path => router({
   method: 'del',
   path: path
+})
+
+const decorate = (args, middleware) => {
+  let [target, key, descriptor] = args
+  target[key] = isArray(target[key])
+  target[key].unshift(middleware)
+
+  return descriptor
+}
+
+export const convert = middleware => (...args) => decorate(args, middleware)
+
+export const required = rules => convert(async (ctx, next) => {
+  let errors = []
+  // 检查是否传入对应的参数
+  const passRules = R.forEachObjIndexed(
+    (value, key) => {
+      errors = R.filter(i => !R.has(i, ctx.request[key]))(value)
+    }
+  )
+  
+  passRules(rules)
+
+  if (errors.length) ctx.throw(412, `${errors.join(', ')}参数缺失`)
+
+  await next()
 })
