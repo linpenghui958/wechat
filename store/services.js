@@ -11,7 +11,9 @@ class Services {
   getUserByOAuth (url) {
     return axios.get(`${baseUrl}/wechat-oauth?url=${url}`)
   }
-
+  getWechatOAuth (url) {
+    return axios.get(`${baseUrl}/wechat-oauth?url=${encodeURIComponent(url)}`)
+  }
   async fetchHouses () {
     try {
       return axios.get(`${baseUrl}/wiki/houses`)

@@ -5,7 +5,7 @@ const SALT_WORK_FACTOR = 10 // 加盐权重
 const MAX_LOGIN_ATTEMPTS = 5 // 最多尝试次数
 const LOCK_TIME = 2 * 60 * 60 * 1000 // 禁止登陆时间
 // 定义userScheme所需的字段
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   // user admin
   role: {
     type: String,
@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   province: String,
   country: String,
   city: String,
+  headimgUrl: String,
   gender: String,
   email: String,
   password: String,
@@ -40,11 +41,11 @@ const userSchema = new mongoose.Schema({
   }
 })
 // 虚拟字段，返回当前账号是否被锁
-userSchema.virtual('isLocked').get(function () {
+UserSchema.virtual('isLocked').get(function () {
   return !!(this.lockUtil && this.lockUtil > Date.now())
 })
 // 存储前更新储存时间
-userSchema.pre('save', function (next) {
+UserSchema.pre('save', function (next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {
@@ -53,7 +54,7 @@ userSchema.pre('save', function (next) {
   next()
 })
 
-userSchema.pre('save', function (next) {
+UserSchema.pre('save', function (next) {
   var user = this
   // 如果没有修改密码直接next
   if (!user.isModified('password')) { return next() }
@@ -69,8 +70,8 @@ userSchema.pre('save', function (next) {
   })
 })
 
-// 给userSchema添加方法
-userSchema.methods = {
+// 给UserSchema添加方法
+UserSchema.methods = {
   // 比较密码的方法
   comparePassword: function (_password, password) {
     return new Promise((resolve, reject) => {
@@ -118,4 +119,4 @@ userSchema.methods = {
     })
   }
 }
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', UserSchema)

@@ -6,7 +6,7 @@ export async function login (email, password) {
   let user = await User.findOne({email: email}).exec()
 
   if (user) {
-    match = await User.comparePassword(password, user.password)
+    match = await user.comparePassword(password, user.password)
   }
  
   return {match, user}

@@ -13,7 +13,8 @@ const createStore = () => {
       currentProduct: {},
       houses: [],
       user: null,
-      characters: []
+      characters: [],
+      authUser: null
     },
     getters,
     actions,

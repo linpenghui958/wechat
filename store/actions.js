@@ -4,9 +4,9 @@ import axios from 'axios'
 export default {
   nuxtServerInit ({ commit }, {req}) {
     if (req.session && req.session.user) {
-      const { email, nickname, avatarUrl} = req.session.user
+      const {email, nickname, avatarUrl} = req.session.user
       const user = {
-        eamil,
+        email,
         nickname,
         avatarUrl
       }
@@ -21,7 +21,8 @@ export default {
       })
 
       const { data } = res
-      if (data.success) commit('SET_USER', data.data) 
+      if (data.success) commit('SET_USER', data.data)
+      return data
     } catch (e) {
       if (e.response.status === 401) {
         throw new Error('来错地方了')
@@ -37,6 +38,12 @@ export default {
   },
   getUserByOAuth ({commit}, url) {
     return Services.getUserByOAuth(url)
+  },
+  getWechatOAuth ({commit}, url) {
+    return Services.getWechatOAuth(url)
+  },
+  setAuthUser ({commit}, authUser) {
+    commit('SET_AUTHUSER', authUser)
   },
   async fetchHouses ({ state }) {
     const res = await Services.fetchHouses()

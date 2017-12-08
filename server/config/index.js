@@ -1,6 +1,6 @@
 export default {
   db: 'mongodb://localhost/ice',
-  SITE_ROOT_URL: 'http://xqa5nn.natappfree.cc',
+  SITE_ROOT_URL: 'http://zdyiri.natappfree.cc',
   wechat: {
     token: 'shanzhuheagualinxiaohui',
     appID: 'wxb2c9aa5c3d86dfdf',

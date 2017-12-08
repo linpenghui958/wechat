@@ -3,7 +3,7 @@ import { controller, get, post, required} from '../decorator/router'
 
 @controller('/admin')
 export class AdminController {
-  @get('/login')  // 路由对应的中间键方法，传入ctx和next
+  @post('/login')  // 路由对应的中间键方法，传入ctx和next
   // 中间键方法，检查请求是否携带email，password
   @required({body: ['email', 'password']})
   async login (ctx, next) {
@@ -13,6 +13,12 @@ export class AdminController {
     const {match, user} = data
     // 如果匹配上了将数据设置到session，并返回
     if (match) {
+      if (user.role !== 'admin') {
+        return (ctx.body = {
+          success: false,
+          err: '来错地方了'
+        })
+      }
       ctx.session.user = {
         _id: user._id,
         email: user.email,

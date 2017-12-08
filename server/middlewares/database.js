@@ -34,6 +34,7 @@ export const database = app => {
     console.log('Connected to MongoDB', config.db)
 
     // 引入对应的model
+    const User = mongoose.model('User')
     const wikiHouseModel = mongoose.model('WikiHouse')
     const wikiCharacterModel = mongoose.model('WikiCharacter')
     // 查询数据库中是否存在tables
@@ -49,6 +50,19 @@ export const database = app => {
       wikiCharacterModel.insertMany(wikiCharacterData)
     } else {
       console.log('wikiCharacterModel 已存在数据')
+    }
+    let user = await User.findOne({
+      email: '370345882@qq.com'
+    }).exec()
+
+    if (!user) {
+      console.log('写入管理员数据')
+      user = new User({
+        email: '370345882@qq.com',
+        password: 'admin',
+        role: 'admin'
+      })
+      await user.save()
     }
   })
 }
