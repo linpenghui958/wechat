@@ -12,15 +12,13 @@ export class WechatController {
   @get('/wechat-hear')  // 路由对应的中间键方法，传入ctx和next
   async wechatHear (ctx, next) {
     const middle = wechatMiddle(config.wechat, reply)
-    const body = await middle(ctx, next)
-    ctx.body = body
+    return middle(ctx, next)
   }
 
   @post('/wechat-hear')
   async wechatPostHear (ctx, next) {
     const middle = wechatMiddle(config.wechat, reply)
-    const body = await middle(ctx, next)
-    ctx.body = body
+    return middle(ctx, next)
   }
 
   @get('/wechat-signature')

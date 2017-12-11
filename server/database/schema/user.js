@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
   country: String,
   city: String,
   headimgUrl: String,
-  gender: String,
+  sex: String,
   email: String,
   password: String,
   hashed_password: String,
