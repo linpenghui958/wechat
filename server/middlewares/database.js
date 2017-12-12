@@ -9,8 +9,8 @@ fs.readdirSync(models)
   .filter(file => ~file.search(/^[^\.].*js$/))
   .forEach(file => require(resolve(models, file)))
 
-const wikiHouseData = require(resolve(__dirname, '../../wikiHousesWithSwornMembers.json'))
-let wikiCharacterData = require(resolve(__dirname, '../../qiniuCharacters.json'))
+const wikiHouseData = require(resolve(__dirname, '../json/wikiHousesWithSwornMembers.json'))
+let wikiCharacterData = require(resolve(__dirname, '../json/qiniuCharacters.json'))
 
 // 保证_id与nmId一致
 wikiCharacterData = R.map(i => {

@@ -14,6 +14,14 @@ class Services {
   getWechatOAuth (url) {
     return axios.get(`${baseUrl}/wechat-oauth?url=${encodeURIComponent(url)}`)
   }
+  createOrder ({productId, name, address, phoneNumber}) {
+    return axios.post(`${baseUrl}/wechat-pay`, {
+      productId,
+      name,
+      address,
+      phoneNumber
+    })
+  }
   async fetchHouses () {
     try {
       return axios.get(`${baseUrl}/wiki/houses`)
