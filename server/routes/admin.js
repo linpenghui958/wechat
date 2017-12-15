@@ -50,4 +50,13 @@ export class AdminController {
       data: null
     }
   }
+
+  @get('/payments')
+  async getPayments (ctx, next) {
+    const res = await api.payment.fetchPayments()
+    ctx.body = {
+      success: true,
+      data: res.data
+    }
+  }
 }

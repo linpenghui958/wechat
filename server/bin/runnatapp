@@ -1,0 +1,2 @@
+#!/bin/bash
+./natapp -authtoken=20e5ec473cc7b2fa

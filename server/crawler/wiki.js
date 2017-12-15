@@ -76,7 +76,7 @@ export const getWikiCharacters = async () => {
   characterData = R.map(getWikiDetail, characterData)
   characterData = await Promise.all(characterData)
 
-  writeFileSync('./chineseCharacters.json', JSON.stringify(characterData, null, 2), 'utf8')
+  writeFileSync(resolve(__dirname, './json/chineseCharacters.json'), JSON.stringify(characterData, null, 2), 'utf8')
 }
 
 export const fetchImageFromIMDb = async () => {
@@ -112,7 +112,7 @@ export const fetchImageFromIMDb = async () => {
   chineseCharactersData = await Promise.all(chineseCharactersData)
   console.log('开始写入文件')
   // 写入文件
-  writeFileSync('./qiniuCharacters.json', JSON.stringify(chineseCharactersData, null, 2), 'utf8')
+  writeFileSync(resolve(__dirname, './json/qiniuCharacters.json'), JSON.stringify(chineseCharactersData, null, 2), 'utf8')
   console.log('保存文件完成')
 }
 
@@ -171,7 +171,7 @@ export const getHouse = async () => {
   data = R.map(getWikiDetail, data)
   data = await Promise.all(data)
 
-  writeFileSync('./wikiHouses.json', JSON.stringify(data, null, 2), 'utf-8')
+  writeFileSync(resolve('./json/wikiHouses.json'), JSON.stringify(data, null, 2), 'utf-8')
 }
 
 export const getSwornMembers = () => {
@@ -217,6 +217,6 @@ export const getSwornMembers = () => {
   })
   // 保存文件
   console.log('保存文件开始')
-  writeFileSync('./wikiHousesWithSwornMembers.json', JSON.stringify(wikiHouseData, null, 2), 'utf8')
+  writeFileSync(resolve('./json/wikiHousesWithSwornMembers.json'), JSON.stringify(wikiHouseData, null, 2), 'utf8')
   console.log('保存文件完成')
 }

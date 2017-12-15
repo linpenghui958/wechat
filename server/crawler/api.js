@@ -1,6 +1,7 @@
 import * as _ from 'lodash'
 import { writeFileSync } from 'fs'
 import request from 'request-promise'
+import { resolve } from 'path'
 
 var characters = []
 
@@ -17,7 +18,7 @@ export const getAllCharacters = async (page = 1) => {
     console.log('爬完了')
     return
   } else {
-    writeFileSync('./characters.json', JSON.stringify(characters), 'utf8')
+    writeFileSync(resolve(__dirname, '../json/characters.json'), JSON.stringify(characters), 'utf8')
     await sleep(1000)
     page++
     getAllCharacters(page)

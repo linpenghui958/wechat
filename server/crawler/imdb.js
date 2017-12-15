@@ -39,7 +39,7 @@ export const getIMDbCharacter = async () => {
     }
   })
   console.log('共拿到' + photos.length + '数据')
-  writeFileSync('./imdb1.json', JSON.stringify(photos, null, 2), 'utf8')
+  writeFileSync(resolve(__dirname, '../../json/imdb1.json'), JSON.stringify(photos, null, 2), 'utf8')
   const fn = R.compose(
     R.map(photo => {
       const reg1 = /\/name\/(.*?)\/\?ref/
@@ -55,7 +55,7 @@ export const getIMDbCharacter = async () => {
 
   photos = fn(photos)
   console.log('过滤后还剩' + photos.length + '数据')
-  writeFileSync('./imdb.json', JSON.stringify(photos, null, 2), 'utf8')
+  writeFileSync(resolve(__dirname, '../../json/imdb.json'), JSON.stringify(photos, null, 2), 'utf8')
   // return photos
 }
 
@@ -75,7 +75,7 @@ const fetchIMDbProfile = async (url) => {
 }
 
 export const getIMDbProfile = async () => {
-  const characters = require(resolve(__dirname, '../../imdb.json'))
+  const characters = require(resolve(__dirname, '../../json/imdb.json'))
   console.log(characters.length)
   for (let i = 0; i < characters.length; i++) {
     if (!characters.profile) {
@@ -83,7 +83,7 @@ export const getIMDbProfile = async () => {
       console.log('正在爬取' + characters[i].name)
       const src = await fetchIMDbProfile(url)
       characters[i].profile = src
-      writeFileSync('./imdbCharacters.json', JSON.stringify(characters, null, 2), 'utf8')
+      writeFileSync(resolve(__dirname, './json/imdbCharacters.json'), JSON.stringify(characters, null, 2), 'utf8')
       await sleep(500)
     }
   }
@@ -101,7 +101,7 @@ const fetchIMDBImage = async (url) => {
   let imagesDOM = $('a.titlecharacters-image-grid__thumbnail-link img')
   let images = []
   imagesDOM.each(function () {
-    let imageUrl = $(this).attr('src') 
+    let imageUrl = $(this).attr('src')
     // 获取src
     // https://images-na.ssl-images-amazon.com/images/M/MV5BODI3ODA5NTQ5OF5BMl5BanBnXkFtZTgwODkzODMzMzI@._V1_.jpg
     // 截取imageUrl 保证原图尺寸
@@ -125,7 +125,7 @@ export const getIMDbImages = async () => {
       const images = await fetchIMDBImage(url)
       characters[i].images = images
 
-      writeFileSync('./fullCharacters.json', JSON.stringify(characters, null, 2), 'utf-8')
+      writeFileSync(resolve('./json/fullCharacters.json'), JSON.stringify(characters, null, 2), 'utf-8')
 
       await sleep(500)
     }

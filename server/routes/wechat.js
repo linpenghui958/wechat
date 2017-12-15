@@ -7,6 +7,9 @@ import { resolve } from 'path'
 import wechatMiddle from '../wechat-lib/middleware'
 import { signature, redirect, oauth } from '../controllers/wechat'
 import mongoose from 'mongoose'
+import { getParamsAsync } from '../wechat-lib/pay'
+
+
 const Product = mongoose.model('Product')
 const Payment = mongoose.model('Payment')
 const User = mongoose.model('User')

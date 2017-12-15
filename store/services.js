@@ -22,6 +22,9 @@ class Services {
       phoneNumber
     })
   }
+  getPayments () {
+    return axios.get(`${baseUrl}/admin/payments`)
+  }
   async fetchHouses () {
     try {
       return axios.get(`${baseUrl}/wiki/houses`)

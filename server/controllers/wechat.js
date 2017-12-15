@@ -11,7 +11,7 @@ export async function signature (ctx, next) {
 
   ctx.body = {
     success: true,
-    params: params
+    data: params
   }
 }
 
