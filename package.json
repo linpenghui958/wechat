@@ -21,6 +21,8 @@
     "css-loader": "^0.28.7",
     "ejs": "^2.5.7",
     "formstream": "^1.1.0",
+    "graphql": "^0.10.1",
+    "graphql-server-koa": "^0.8.3",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.3.0",
