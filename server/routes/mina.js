@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { controller, get, post, required} from '../decorator/router'
 import { openidAndSessionKey, WXBizDataCrypt } from '../wechat-lib/mina'
 import { getUserAsync, loginAsync } from '../controllers/user'
-
+import { createOrderAsync, paymentAsync } from '../controllers/wechat'
 const User = mongoose.model('User')
 
 @controller('/mina')
@@ -30,6 +30,17 @@ export class MinaController {
   @required({body: ['code', 'avatarUrl', 'nickName']})
   async login (ctx, next) {
     await loginAsync(ctx, next)
+  }
+
+  @post('/createOrder')
+  @required({body: ['code', 'productId', 'userInfo', 'name', 'address', 'phoneNumber']})
+  async createOrder (ctx, next) {
+    await createOrderAsync(ctx, next)
+  }
+
+  @post('/payment')
+  async payment (ctx, next) {
+    await paymentAsync(ctx, next)
   }
 
 }
