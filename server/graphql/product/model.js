@@ -1,19 +1,30 @@
 import {
   GraphQLID,
-  GraphQLList,
+  GraphQLString,
   GraphQLObjectType,
-  GraphQLString
+  GraphQLList
 } from 'graphql'
 
-// 新建一个GraphQLObjectType实例（每一个type都是它的实例）
+const parameterType = new GraphQLObjectType({
+  name: 'parameters',
+  fields: {
+    key: {
+      type: GraphQLString
+    },
+    value: {
+      type: GraphQLString
+    }
+  }
+})
+
 export let ProductType = new GraphQLObjectType({
   name: 'Product',
   fields: {
     _id: {
-      type: GraphQLID // 唯一的ID
+      type: GraphQLID
     },
     price: {
-      type: GraphQLString  // 字符串
+      type: GraphQLString
     },
     title: {
       type: GraphQLString
@@ -22,7 +33,10 @@ export let ProductType = new GraphQLObjectType({
       type: GraphQLString
     },
     images: {
-      type: new GraphQLList(GraphQLString) // 一个数组（每个值是字符串）
+      type: new GraphQLList(GraphQLString)
+    },
+    parameters: {
+      type: new GraphQLList(parameterType)
     }
   }
 })

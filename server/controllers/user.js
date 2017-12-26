@@ -105,3 +105,39 @@ export async function oauth (ctx, next) {
     data: user
   }
 }
+
+export const decryptUserAsync = async (code, userInfo) => {
+  const minaUser = await openidAndSessionKey(code)
+
+  let user = await User.findOne({
+    unionid: minaUser.unionid
+  }).exec()
+
+  if (!user) {
+    let pc = new WXBizDataCrypt(minaUser.session_key)
+    let data = pc.decryptData(userInfo.encryptedData, userInfo.iv)
+
+    user = await User.findOne({
+      unionid: data.unionId
+    })
+
+    if (!user) {
+      let _userData = userInfo.userInfo
+
+      user = new User({
+        avatarUrl: _userData.avatarUrl,
+        nickname: _userData.nickName,
+        unionid: data.unionid,
+        openid: [minaUser.openid],
+        sex: _userData.gender,
+        country: _userData.country,
+        province: _userData.province,
+        city: _userData.city
+      })
+
+      await user.save()
+    }
+  }
+
+  return user
+}
